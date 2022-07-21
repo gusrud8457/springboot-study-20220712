@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.springboot.studykyeong.domain.board.BoardRepository">
+  	<insert id="save" parameterType="com.springboot.studykyeong.domain.board.Board"
+  	  useGeneratedKeys="true" keyProperty="boardcode">
+  	 	insert into
+  	 	  board_mst
+  	 	values(
+  	 	  0,
+  	 	  #{title},
+  	 	  #{usercode},
+  	 	  #{content},
+  	 	  now(),
+  	 	  now()
+ 	 	)
+  	
+  	</insert>
+  	
+  	<select id="findBoardByBoardcode" parameterType="Integer" resultType="com.springboot.studykyeong.domain.board.Board">
+  		select
+  			bm.boardcode,
+  			bm.title,
+  			bm.usercode,
+  			um.username,
+  			bm.content,
+  			bm.createdate,
+  			bm.updatedate
+
+  		from 
+  			board_mst bm
+  			left outer join user_mst um on (um.usercode = bm.usercode)
+		where
+			bm.boardcode = #{boardcode}
+  	
+  	</select>
+  	
+  	<select id="getBoardListOfIndex" parameterType="Integer" resultType="com.springboot.studykyeong.domain.board.Board">
+	  	select
+	  			bm.boardcode,
+	  			bm.title,
+	  			bm.usercode,
+	  			um.username,
+	  			bm.content,
+	  			bm.createdate,
+	  			bm.updatedate
+	  		from 
+	  			board_mst bm
+	  			left outer join user_mst um on (um.usercode = bm.usercode)
+  			order by
+  				bm.createdate desc,
+  				bm.boardcode desc
+			limit #{index}, 10
+  	</select>
+  </mapper>
